@@ -1,5 +1,8 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//
+// EddyStone protocol specification: https://github.com/google/eddystone/blob/master/protocol-specification.md
+//
 
 #include "EddystoneBeacon.h"
 
@@ -64,7 +67,7 @@ void EddystoneBeacon::begin(char power, const BLEUuid& uid) {
 
   this->_bleCharacteristic.setValue(serviceData, sizeof(serviceData));
 
-  this->setAdvertisedServiceUuid(this->_bleService.uuid());
+  this->setAdvertisedServiceUuid(this->_bleService.uuid(), false); // complete list of services
 
   BLEPeripheral::begin();
 
@@ -75,7 +78,7 @@ void EddystoneBeacon::begin(char power, const char* uri) {
   this->_power = power;
   this->setURI(uri);
 
-  this->setAdvertisedServiceUuid(this->_bleService.uuid());
+  this->setAdvertisedServiceUuid(this->_bleService.uuid(), false); // complete list of services
 
   BLEPeripheral::begin();
 
