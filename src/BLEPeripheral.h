@@ -67,7 +67,7 @@ class BLEPeripheral : public BLEDeviceEventListener,
     void poll();
     void end();
 
-    void setAdvertisedServiceUuid(const char* advertisedServiceUuid);
+    void setAdvertisedServiceUuid(const char* advertisedServiceUuid, bool hasMoreServices = true);
     void setServiceSolicitationUuid(const char* serviceSolicitationUuid);
     void setManufacturerData(const unsigned char manufacturerData[], unsigned char manufacturerDataLength);
     void setLocalName(const char *localName);
@@ -135,6 +135,8 @@ class BLEPeripheral : public BLEDeviceEventListener,
 #else
     nRF8001                        _nRF8001;
 #endif
+
+	bool						   _hasMoreServicesThanAdvertised;
 
     const char*                    _advertisedServiceUuid;
     const char*                    _serviceSolicitationUuid;

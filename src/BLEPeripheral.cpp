@@ -94,7 +94,9 @@ void BLEPeripheral::begin() {
     unsigned char uuidLength = advertisedServiceUuid.length();
     if (uuidLength + 2 <= remainingAdvertisementDataLength) {
       advertisementData[advertisementDataSize].length = uuidLength;
-      advertisementData[advertisementDataSize].type = (uuidLength > 2) ? 0x06 : 0x02;
+	  advertisementData[advertisementDataSize].type = (this->_hasMoreServicesThanAdvertised) ? 
+		((uuidLength > 2) ? BLE_GAP_AD_TYPE_128BIT_SERVICE_UUID_MORE_AVAILABLE : BLE_GAP_AD_TYPE_16BIT_SERVICE_UUID_MORE_AVAILABLE) :
+		((uuidLength > 2) ? BLE_GAP_AD_TYPE_128BIT_SERVICE_UUID_COMPLETE       : BLE_GAP_AD_TYPE_16BIT_SERVICE_UUID_COMPLETE);
 
       memcpy(advertisementData[advertisementDataSize].data, advertisedServiceUuid.data(), uuidLength);
       advertisementDataSize += 1;
@@ -174,8 +176,9 @@ void BLEPeripheral::end() {
   this->_device->end();
 }
 
-void BLEPeripheral::setAdvertisedServiceUuid(const char* advertisedServiceUuid) {
+void BLEPeripheral::setAdvertisedServiceUuid(const char* advertisedServiceUuid, bool hasMoreServices) {
   this->_advertisedServiceUuid = advertisedServiceUuid;
+  this->_hasMoreServicesThanAdvertised = hasMoreServices;
 }
 
 void BLEPeripheral::setServiceSolicitationUuid(const char* serviceSolicitationUuid) {
